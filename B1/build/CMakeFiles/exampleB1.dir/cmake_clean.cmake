@@ -11,6 +11,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/exampleB1.dir/src/B1PrimaryGeneratorAction.cc.o"
   "CMakeFiles/exampleB1.dir/src/B1RunAction.cc.o"
   "CMakeFiles/exampleB1.dir/src/B1SteppingAction.cc.o"
+  "CMakeFiles/exampleB1.dir/src/B1TrackingAction.cc.o"
   "exampleB1"
   "exampleB1.pdb"
 )

@@ -8,7 +8,7 @@
 #include "B1ParticleSource.hh"
 
 #include "G4SystemOfUnits.hh"
-#include "G4Geantino.hh"
+#include "G4OpticalPhoton.hh"
 #include "G4ThreeVector.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
@@ -25,9 +25,10 @@
 #include "G4Tokenizer.hh"
 
 B1ParticleSourceMessenger::B1ParticleSourceMessenger
-(B1ParticleSource* fPtclGun) : fParticleGun(fPtclGun)
+(B1ParticleSource* fPtclGun) 
+    : fParticleGun(fPtclGun)
 {
-    gunDirectory = new G4UIdirectory("/B1/gun");
+    gunDirectory = new G4UIdirectory("/B1/gun/");
     gunDirectory->SetGuidance("Particle Source control commands");
 
     listCmd = new G4UIcmdWithoutParameter("/B1/gun/List",this);
@@ -37,20 +38,12 @@ B1ParticleSourceMessenger::B1ParticleSourceMessenger
     // particle definition
     particleCmd = new G4UIcmdWithAString("/B1/gun/particle", this);
     particleCmd->SetGuidance("Set particle to be generated.");
-    particleCmd->SetGuidance(" (geantino is default)");
+    particleCmd->SetGuidance(" (opticalphoton is default)");
     particleCmd->SetGuidance(" (ion can be specified for shooting ions)");
     particleCmd->SetParameterName("particleName",true);
-    particleCmd->SetDefaultValue("geantino");
-    G4String candidateList; 
-    G4int nPtcl = particleTable->entries();
-    for(G4int i=0;i<nPtcl;i++)
-    {
-        candidateList += particleTable->GetParticleName(i);
-        candidateList += " ";
-    }
-    candidateList += "ion ";
-    particleCmd->SetCandidates(candidateList);
-
+    particleCmd->SetDefaultValue("opticalphoton");
+    particleCmd->SetCandidates("opticalphoton");
+   
     // particle direction
     directionCmd = new G4UIcmdWith3Vector("/B1/gun/direction", this);
     directionCmd->SetGuidance("Set momentum direction.");
@@ -65,6 +58,15 @@ B1ParticleSourceMessenger::B1ParticleSourceMessenger
     energyCmd->SetDefaultUnit("eV");
     //energyCmd->SetUnitCategory("Energy");
     //energyCmd->SetUnitCandidates("eV keV MeV GeV TeV");
+    
+    // angular distribution
+    angtypeCmd = new G4UIcmdWithAString("/B1/gun/angtype", this);
+    angtypeCmd->SetGuidance("Sets angular source distribution type");
+    angtypeCmd->SetGuidance("Possible variables are: iso direction");
+    angtypeCmd->SetParameterName("AngDis",true,true);
+    angtypeCmd->SetDefaultValue("iso");
+    angtypeCmd->SetCandidates("iso HalfSphere direction");
+
 
     positionCmd = new G4UIcmdWith3VectorAndUnit("/B1/gun/position",this);
     positionCmd->SetGuidance("Set starting position of the particle.");
@@ -94,14 +96,92 @@ B1ParticleSourceMessenger::B1ParticleSourceMessenger
     centreCmd->SetParameterName("X","Y","Z",true,true);
     centreCmd->SetDefaultUnit("cm");
     centreCmd->SetUnitCandidates("nm um mm cm m km");
+
+    // energy distribution
+    energytypeCmd = new G4UIcmdWithAString("/B1/gun/energytype", this);
+    energytypeCmd->SetGuidance("Sets energy distribution type");
+    energytypeCmd->SetGuidance("Possible variables are: Mono");
+    energytypeCmd->SetParameterName("EnergyDis",true,true);
+    energytypeCmd->SetDefaultValue("Mono");
+    energytypeCmd->SetCandidates("Mono");
+
+    
+    // verbosity
+    verbosityCmd = new G4UIcmdWithAnInteger("/B1/gun/verbose",this);
+    verbosityCmd->SetGuidance("Set Verbose level for gun");
+    verbosityCmd->SetGuidance(" 0 : Silent");
+    verbosityCmd->SetGuidance(" 1 : Limited information");
+    verbosityCmd->SetGuidance(" 2 : Detailed information");
+    verbosityCmd->SetParameterName("level",false);
+    verbosityCmd->SetRange("level>=0 && level <=2");
+
 }
 
 B1ParticleSourceMessenger::~B1ParticleSourceMessenger()
-{;}
+{
+    delete listCmd;
+    delete typeCmd;
+    delete shapeCmd;
+    delete centreCmd;
+    delete energytypeCmd;
+    delete particleCmd;
+    delete positionCmd;
+    delete directionCmd;
+    delete energyCmd;
+    delete angtypeCmd;
+
+    delete gunDirectory;
+}
 
 void B1ParticleSourceMessenger::SetNewValue
-    (G4UIcommand* cmd, G4String newValues) {
+(G4UIcommand* cmd, G4String newValues) {
     
-    //if ( cmd == typeCmd )
-    //    fParticleGun->SetPosDisType(newValues);
+    
+    if ( cmd == typeCmd )
+        fParticleGun->SetPosDisType(newValues);
+
+    else if ( cmd == shapeCmd )
+        fParticleGun->SetPosDisShape(newValues);
+
+    else if ( cmd == centreCmd ) 
+        fParticleGun->SetCentreCoords( centreCmd->GetNew3VectorValue(newValues) );
+
+    else if ( cmd == energytypeCmd )
+        fParticleGun->SetEnergyDisType(newValues);
+
+    else if ( cmd == particleCmd ) {
+        G4ParticleDefinition *pd = particleTable->FindParticle(newValues);
+        if( pd != NULL )
+            fParticleGun->SetParticleDefinition(pd);
+    }
+
+    else if ( cmd == angtypeCmd ) {
+        fParticleGun->SetAngDistType(newValues);
+    }
+
+    else if ( cmd == listCmd )
+        particleTable->DumpTable();
+
+    else if ( cmd == directionCmd ) {
+        fParticleGun->SetAngDistType("direction");
+        fParticleGun->SetParticleMomentumDirection
+            (directionCmd->GetNew3VectorValue(newValues));
+    }
+
+    else if ( cmd == energyCmd ) {
+        fParticleGun->SetEnergyDisType("Mono");
+        fParticleGun->SetMonoEnergy(energyCmd->GetNewDoubleValue(newValues));
+    }
+
+    else if ( cmd == positionCmd ) {
+        fParticleGun->SetPosDisType("Point");
+        fParticleGun->SetCentreCoords(positionCmd->GetNew3VectorValue(newValues));
+    }
+
+    else if ( cmd == verbosityCmd )
+        fParticleGun->SetVerbosity(verbosityCmd->GetNewIntValue(newValues));
+
+    else
+        G4cout << "Error: Unknow Command" << G4endl;
+        
 }

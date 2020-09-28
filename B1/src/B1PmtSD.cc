@@ -44,6 +44,9 @@ void B1PmtSD::Initialize(G4HCofThisEvent* hce)
 
 G4bool B1PmtSD::ProcessHits( G4Step* aStep, G4TouchableHistory*)
 {
+    
+    G4cout << "SD Hit Info : " << aStep->GetTrack()->GetTrackID() << G4endl;
+
     G4double edep = aStep->GetTotalEnergyDeposit();
     G4double stepLength = aStep->GetStepLength();
     if(edep == 0. && stepLength == 0. ) return false;

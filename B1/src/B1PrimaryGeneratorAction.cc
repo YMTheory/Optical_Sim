@@ -53,6 +53,7 @@ B1PrimaryGeneratorAction::B1PrimaryGeneratorAction()
 B1PrimaryGeneratorAction::~B1PrimaryGeneratorAction()
 {
   delete fParticleGun;
+  delete fParticleSource;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,9 +67,10 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     // on DetectorConstruction class we get Envelope volume
     // from G4LogicalVolumeStore.
 
-    /*
-    G4cout << "Genarate Primary Particles ..." << G4endl; 
+    
+    //G4cout << "Genarate Primary Particles ..." << G4endl; 
 
+    /*
     // Generate more than one particle each time
     NumberOfParticlesToBeGenerated = 10000;
     fParticleGun = new G4ParticleGun(NumberOfParticlesToBeGenerated);
@@ -105,10 +107,10 @@ void B1PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         fParticleGun->GeneratePrimaryVertex( anEvent );
     }
-    */
+    */ 
 
-    fParticleGun->GeneratePrimaryVertex(anEvent);
-
+    //fParticleGun->GeneratePrimaryVertex(anEvent);
+    fParticleSource -> GeneratePrimaryVertex(anEvent);
 
 }
 

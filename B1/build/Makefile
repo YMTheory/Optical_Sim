@@ -523,6 +523,33 @@ src/B1SteppingAction.cc.s:
 	$(MAKE) -f CMakeFiles/exampleB1.dir/build.make CMakeFiles/exampleB1.dir/src/B1SteppingAction.cc.s
 .PHONY : src/B1SteppingAction.cc.s
 
+src/B1TrackingAction.o: src/B1TrackingAction.cc.o
+
+.PHONY : src/B1TrackingAction.o
+
+# target to build an object file
+src/B1TrackingAction.cc.o:
+	$(MAKE) -f CMakeFiles/exampleB1.dir/build.make CMakeFiles/exampleB1.dir/src/B1TrackingAction.cc.o
+.PHONY : src/B1TrackingAction.cc.o
+
+src/B1TrackingAction.i: src/B1TrackingAction.cc.i
+
+.PHONY : src/B1TrackingAction.i
+
+# target to preprocess a source file
+src/B1TrackingAction.cc.i:
+	$(MAKE) -f CMakeFiles/exampleB1.dir/build.make CMakeFiles/exampleB1.dir/src/B1TrackingAction.cc.i
+.PHONY : src/B1TrackingAction.cc.i
+
+src/B1TrackingAction.s: src/B1TrackingAction.cc.s
+
+.PHONY : src/B1TrackingAction.s
+
+# target to generate assembly for a file
+src/B1TrackingAction.cc.s:
+	$(MAKE) -f CMakeFiles/exampleB1.dir/build.make CMakeFiles/exampleB1.dir/src/B1TrackingAction.cc.s
+.PHONY : src/B1TrackingAction.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -573,6 +600,9 @@ help:
 	@echo "... src/B1SteppingAction.o"
 	@echo "... src/B1SteppingAction.i"
 	@echo "... src/B1SteppingAction.s"
+	@echo "... src/B1TrackingAction.o"
+	@echo "... src/B1TrackingAction.i"
+	@echo "... src/B1TrackingAction.s"
 .PHONY : help
 
 

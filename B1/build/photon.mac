@@ -1,0 +1,16 @@
+/run/initialize
+
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 1
+
+/B1/gun/verbose 1
+/B1/gun/particle opticalphoton
+/B1/gun/energytype Mono
+/B1/gun/energy 2 eV
+
+/B1/gun/angtype HalfSphere
+/B1/gun/type Point
+/B1/gun/shape Sphere
+
+/run/beamOn 10

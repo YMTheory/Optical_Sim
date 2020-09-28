@@ -16,6 +16,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/B1/src/B1PrimaryGeneratorAction.cc" "/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/B1/build/CMakeFiles/exampleB1.dir/src/B1PrimaryGeneratorAction.cc.o"
   "/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/B1/src/B1RunAction.cc" "/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/B1/build/CMakeFiles/exampleB1.dir/src/B1RunAction.cc.o"
   "/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/B1/src/B1SteppingAction.cc" "/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/B1/build/CMakeFiles/exampleB1.dir/src/B1SteppingAction.cc.o"
+  "/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/B1/src/B1TrackingAction.cc" "/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/B1/build/CMakeFiles/exampleB1.dir/src/B1TrackingAction.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

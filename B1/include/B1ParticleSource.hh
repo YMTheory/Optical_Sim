@@ -12,6 +12,7 @@
 #include "G4ParticleMomentum.hh"
 #include "G4ParticleDefinition.hh"
 
+#include "B1ParticleSourceMessenger.hh"
 
 class B1ParticleSource : public G4VPrimaryGenerator {
 
@@ -73,6 +74,9 @@ class B1ParticleSource : public G4VPrimaryGenerator {
 
         // Verbose
         G4int verbosityLevel;
+
+    private:
+        B1ParticleSourceMessenger* theMessenger;
 };
 
 #endif

@@ -111,7 +111,7 @@ void B1EventAction::EndOfEventAction(const G4Event* event)
     // Print per event
     auto eventID = event->GetEventID();
     auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
-    if( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
+    if( ( printModulo > 1 ) && ( eventID % printModulo == 0 ) ) {
         G4cout << "---> End of event: " << eventID << G4endl;     
         PrintEventStatistics( pmtHit->GetTrackID() );
     }

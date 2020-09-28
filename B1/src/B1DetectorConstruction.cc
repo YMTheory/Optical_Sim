@@ -132,7 +132,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
     // design of PMT
     //
     G4double pi = 3.14159265;
-    G4double pmt_Radius = 3.0*cm;
+    G4double pmt_Radius = 100.*cm; //3.0*cm;
     G4double pmt_Length = 20.0*cm;
     G4Tubs* solidPmt = new G4Tubs("solidPmt", 0, pmt_Radius, pmt_Length/2, 0, 2*pi);
     G4LogicalVolume* logicPmt = 

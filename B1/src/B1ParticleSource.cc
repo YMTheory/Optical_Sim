@@ -36,9 +36,12 @@ B1ParticleSource::B1ParticleSource ()  {
 
     EnergyDisType                  = "Mono";
     MonoEnergy                     = 1*MeV;
+
+    theMessenger                   = new B1ParticleSourceMessenger(this);
 }
 
 B1ParticleSource::~B1ParticleSource () {
+    delete theMessenger;
 }
 
 
@@ -50,6 +53,11 @@ void B1ParticleSource::SetPosDisType(G4String PosType)
 void B1ParticleSource::SetPosDisShape(G4String shapeType)
 {
     Shape = shapeType;
+}
+
+void B1ParticleSource::SetCentreCoords(G4ThreeVector coordsOfCentre)
+{
+  CentreCoords = coordsOfCentre;
 }
 
 void B1ParticleSource::GeneratePointSource()
@@ -176,7 +184,7 @@ void B1ParticleSource::SetParticleDefinition(G4ParticleDefinition* aParticleDefi
 
 
 void B1ParticleSource::GeneratePrimaryVertex(G4Event* event)  {
-    if( particle_definition = NULL ) {
+    if( particle_definition == NULL ) {
         G4cout << "No particle has been defined !" << G4endl;
         return;
     }
@@ -218,7 +226,7 @@ void B1ParticleSource::GeneratePrimaryVertex(G4Event* event)  {
         G4double px     = pmom*particle_momentum_direction.x();
         G4double py     = pmom*particle_momentum_direction.y();
         G4double pz     = pmom*particle_momentum_direction.z();
-        if(verbosityLevel >= 1){
+        if(verbosityLevel >= 2){
             G4cout << "Particle name: " 
                 << particle_definition->GetParticleName() << G4endl; 
             G4cout << "       Energy: "<<particle_energy << G4endl;
