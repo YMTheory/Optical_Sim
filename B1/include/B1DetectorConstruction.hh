@@ -58,14 +58,17 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
         B1DetectorConstructionMessenger* fMessenger;
     
     public:
-        G4double GetCellSize() { return fCellSize; }
-        void SetCellSize(G4double size) { fCellSize = size; }
+        G4double GetCellSize() { return fCellXYSize; }
+        void SetCellXYSize(G4double size) { fCellXYSize = size; }
 
         G4double GetPmtSize()  { return fPmtSize;  }
         void SetPmtSize(G4double size) { fPmtSize = size; }
 
         G4ThreeVector GetPmtPos()  { return fPmtPos; }
         void SetPmtPos(G4ThreeVector pos) { fPmtPos = pos; }
+
+        G4double GetRindex()  { return fRindex; }
+        void SetRindex(G4double rindex) { fRindex = rindex; }
 
 
 
@@ -76,7 +79,8 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
         G4Material* world_mat;
         G4Material* glass_mat;
 
-        G4double        fCellSize;
+        G4double        fRindex;
+        G4double        fCellXYSize;
         G4double        fPmtSize;
         G4ThreeVector   fPmtPos;
 };

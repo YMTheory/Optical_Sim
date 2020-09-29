@@ -45,6 +45,13 @@ B1ParticleSourceMessenger::B1ParticleSourceMessenger
     particleCmd->SetParameterName("particleName",true);
     particleCmd->SetDefaultValue("opticalphoton");
     particleCmd->SetCandidates("opticalphoton");
+
+    // particle number
+    numberCmd = new G4UIcmdWithAnInteger("/B1/gun/number", this);
+    numberCmd->SetGuidance("Set initial particle number");
+    numberCmd->SetParameterName("particleNumber", true);
+    numberCmd->SetDefaultValue(10000);
+
    
     // particle direction
     directionCmd = new G4UIcmdWith3Vector("/B1/gun/direction", this);
@@ -138,6 +145,7 @@ B1ParticleSourceMessenger::~B1ParticleSourceMessenger()
     delete energyCmd;
     delete angtypeCmd;
     delete angLimitCmd;
+    delete numberCmd;
 
     delete gunDirectory;
 }
@@ -189,6 +197,10 @@ void B1ParticleSourceMessenger::SetNewValue
     else if ( cmd == positionCmd ) {
         fParticleGun->SetPosDisType("Point");
         fParticleGun->SetCentreCoords(positionCmd->GetNew3VectorValue(newValues));
+    }
+
+    else if ( cmd == numberCmd ) {
+        fParticleGun->SetParticleNumber(numberCmd->GetNewIntValue(newValues));
     }
 
     else if ( cmd == verbosityCmd )

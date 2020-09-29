@@ -46,6 +46,11 @@ B1ParticleSource::~B1ParticleSource () {
 }
 
 
+void B1ParticleSource::SetParticleNumber(G4int number) 
+{
+    NumberOfParticlesToBeGenerated = number;
+}
+
 void B1ParticleSource::SetPosDisType(G4String PosType)
 {
     SourcePosType = PosType;

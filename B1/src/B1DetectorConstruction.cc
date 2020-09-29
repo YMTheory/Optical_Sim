@@ -29,18 +29,16 @@
 /// \brief Implementation of the B1DetectorConstruction class
 
 #include "B1DetectorConstruction.hh"
+#include "B1DetectorConstructionMessenger.hh"
 #include "B1PmtSD.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
 #include "G4Material.hh"
 #include "G4SDManager.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
-#include "G4Cons.hh"
-#include "G4Orb.hh"
-#include "G4Sphere.hh"
-#include "G4Trd.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
@@ -54,9 +52,12 @@ B1DetectorConstruction::B1DetectorConstruction()
 : G4VUserDetectorConstruction(),
     fNofLayers(1)
 { 
-    fCellSize = 10.*mm;
+    fRindex = 1.5;
+    fCellXYSize = 10.*mm;
     fPmtSize  = 3.*cm;
-    fPmtPos   = G4ThreeVector(0, 0, 0);
+    fPmtPos   = G4ThreeVector(400.*mm, 0, 0);
+
+    fMessenger = new B1DetectorConstructionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +80,7 @@ void B1DetectorConstruction::DefineMaterials()
     glass_mat = new G4Material(name="glass_mat", density=2.23*g/cm3, compNum=2);
     G4MaterialPropertiesTable* glass_mpt = new G4MaterialPropertiesTable();
     G4double glass_PhotonEnergy[nEntries] = {2.884*eV, 3.024*eV};
-    G4double glass_RIndex[nEntries] = {1.0, 1.0};
+    G4double glass_RIndex[nEntries] = {fRindex, fRindex}; //{1.0, 1.0};
     glass_mpt->AddProperty("RINDEX", glass_PhotonEnergy, glass_RIndex, nEntries);
     glass_mat->SetMaterialPropertiesTable(glass_mpt);
     
@@ -117,7 +118,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
 
   // design of cuvette
   //
-  G4double outcell_sizeXY = 10.*mm; //6.25*mm;
+  G4double outcell_sizeXY = fCellXYSize; //6.25*mm;
   G4double outcell_sizeZ  = 22.5*mm;
   G4Box* solidOutCell = 
       new G4Box("solidOutCell", outcell_sizeXY, outcell_sizeXY, outcell_sizeZ);
@@ -127,7 +128,8 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
                           "logicOutCell");
   G4VPhysicalVolume* phyOutCell = 
       new G4PVPlacement(0, 
-                        G4ThreeVector(0, 0, 0),
+                        fPmtPos,
+                        //G4ThreeVector(0, 0, 0),
                         logicOutCell,
                         "phyOutCell",
                         logicWorld,
@@ -137,8 +139,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
 
     // design of PMT
     //
-    G4double pi = 3.14159265;
-    G4double pmt_Radius = 3.0*cm;
+    G4double pmt_Radius = fPmtSize; //3.0*cm;
     G4double pmt_Length = 20.0*cm;
     G4Tubs* solidPmt = new G4Tubs("solidPmt", 0, pmt_Radius, pmt_Length/2, 0, 2*pi);
     G4LogicalVolume* logicPmt = 

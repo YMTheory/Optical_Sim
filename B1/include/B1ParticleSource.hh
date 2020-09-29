@@ -23,6 +23,9 @@ class B1ParticleSource : public G4VPrimaryGenerator {
         void GeneratePrimaryVertex(G4Event* event);
 
     public:
+        // particle number
+        void SetParticleNumber(G4int);
+
         // position distribution
         void SetPosDisType(G4String);
         void SetPosDisShape(G4String);

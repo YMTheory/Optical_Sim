@@ -9,6 +9,7 @@
 
 class B1DetectorConstruction;
 class G4UIdirectory;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
 
@@ -18,8 +19,7 @@ class G4UIcmdWith3VectorAndUnit;
 class B1DetectorConstructionMessenger : public G4UImessenger
 {
     public:
-        B1DetectorConstructionMessenger(
-                        B1DetectorConstruction* mpga);
+        B1DetectorConstructionMessenger( B1DetectorConstruction* mpga );
         ~B1DetectorConstructionMessenger();
 
 
@@ -31,10 +31,10 @@ class B1DetectorConstructionMessenger : public G4UImessenger
 
         G4UIdirectory*                  fDirectory;
 
-        G4UIcmdWithADoubleAndUnit*     fCellSizeCmd;
+        G4UIcmdWithADoubleAndUnit*      fCellXYSizeCmd;
         G4UIcmdWithADoubleAndUnit*      fPmtSizeCmd;
         G4UIcmdWith3VectorAndUnit*      fPmtPosCmd;
-
+        G4UIcmdWithADouble*             fRindexCmd;
 };
 
 #endif

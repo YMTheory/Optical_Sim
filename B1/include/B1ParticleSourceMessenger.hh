@@ -40,6 +40,7 @@ class B1ParticleSourceMessenger: public G4UImessenger {
     private:
         G4UIdirectory                *gunDirectory;
 
+        G4UIcmdWithAnInteger         *numberCmd;
         G4UIcmdWithAString           *particleCmd;
         G4UIcmdWithAString           *typeCmd;
         G4UIcmdWithAString           *shapeCmd;
