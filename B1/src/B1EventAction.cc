@@ -30,6 +30,7 @@
 
 #include "B1EventAction.hh"
 #include "B1Analysis.hh"
+#include "B1AnalysisManager.hh"
 #include "B1PmtHit.hh"
 #include "B1PmtSD.hh"
 
@@ -89,7 +90,7 @@ void B1EventAction::PrintEventStatistics(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1EventAction::BeginOfEventAction(const G4Event* evt)
+void B1EventAction::BeginOfEventAction(const G4Event* )
 {
     //G4cout << "Begin of Event " << evt->GetEventID() << G4endl;
 }
@@ -98,6 +99,11 @@ void B1EventAction::BeginOfEventAction(const G4Event* evt)
 
 void B1EventAction::EndOfEventAction(const G4Event* event)
 {   
+
+    B1AnalysisManager* analysis = B1AnalysisManager::getInstance();
+    G4int evtid = event->GetEventID();
+    analysis->analyseEventID( evtid );
+
     // Get hits collections IDs (only once)
     if(fPmtID == -1)  {
         fPmtID
@@ -121,13 +127,16 @@ void B1EventAction::EndOfEventAction(const G4Event* event)
     // Fill ntuple
     //
     // get analysis manager
-    auto analysisManager = G4AnalysisManager::Instance();
+    //auto analysisManager = G4AnalysisManager::Instance();
 
-    // fill ntuple
-    analysisManager->FillNtupleIColumn( 0, pmtHit->GetTrackID() );
-    analysisManager->FillNtupleIColumn( 1, pmtHC->entries() );
-    analysisManager->AddNtupleRow();
+    //// fill ntuple
+    //analysisManager->FillNtupleIColumn( 0, pmtHit->GetTrackID() );
+    //analysisManager->FillNtupleIColumn( 1, pmtHC->entries() );
+    //analysisManager->AddNtupleRow();
 
+    analysis->analysePhotonNumber(pmtHC->entries());
+
+    analysis->analyseAddNtupleRow();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

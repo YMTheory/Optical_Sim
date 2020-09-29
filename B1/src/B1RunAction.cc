@@ -31,6 +31,7 @@
 #include "B1RunAction.hh"
 #include "B1EventAction.hh"
 #include "B1Analysis.hh"
+#include "B1AnalysisManager.hh"
 
 #include "G4RunManager.hh"
 #include "G4Run.hh"
@@ -46,17 +47,17 @@ B1RunAction::B1RunAction()
     G4RunManager::GetRunManager()->SetPrintProgress(1);
     
     // Create analysis manager
-    auto analysisManager = G4AnalysisManager::Instance();
-    G4cout << "Using " << analysisManager->GetType() << G4endl;
+    //auto analysisManager = G4AnalysisManager::Instance();
+    //G4cout << "Using " << analysisManager->GetType() << G4endl;
 
-    analysisManager->SetVerboseLevel(1);
-    analysisManager->SetNtupleMerging(true);
+    //analysisManager->SetVerboseLevel(1);
+    //analysisManager->SetNtupleMerging(true);
 
-    // Book ntuples:
-    analysisManager->CreateNtuple("B1", "Hits Info in SD");
-    analysisManager->CreateNtupleIColumn("TrackID");
-    analysisManager->CreateNtupleIColumn("nPhoton");
-    analysisManager->FinishNtuple();
+    //// Book ntuples:
+    //analysisManager->CreateNtuple("B1", "Hits Info in SD");
+    //analysisManager->CreateNtupleIColumn("TrackID");
+    //analysisManager->CreateNtupleIColumn("nPhoton");
+    //analysisManager->FinishNtuple();
     
 }
 
@@ -64,7 +65,7 @@ B1RunAction::B1RunAction()
 
 B1RunAction::~B1RunAction()
 {
-    delete G4AnalysisManager::Instance();
+    //delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,10 +74,13 @@ void B1RunAction::BeginOfRunAction(const G4Run*)
 {
     G4cout << "Begin of One Run" << G4endl;
 
-    auto analysisManager = G4AnalysisManager::Instance();
-    // Open an output file
-    G4String fileName = "B1";
-    analysisManager->OpenFile(fileName);
+    //auto analysisManager = G4AnalysisManager::Instance();
+    //// Open an output file
+    //G4String fileName = "B1";
+    //analysisManager->OpenFile(fileName);
+
+    B1AnalysisManager* analysis = B1AnalysisManager::getInstance();
+    analysis->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,6 +91,8 @@ void B1RunAction::EndOfRunAction(const G4Run* )
     // save ntuples
     analysisManager->Write();
     analysisManager->CloseFile();
+    B1AnalysisManager* analysis = B1AnalysisManager::getInstance();
+    analysis->finish();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

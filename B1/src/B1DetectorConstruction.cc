@@ -54,7 +54,7 @@ B1DetectorConstruction::B1DetectorConstruction()
 { 
     fRindex = 1.5;
     fCellXYSize = 10.*mm;
-    fPmtSize  = 3.*cm;
+    fPmtSize  = 30.*mm;
     fPmtPos   = G4ThreeVector(400.*mm, 0, 0);
 
     fMessenger = new B1DetectorConstructionMessenger(this);
@@ -73,7 +73,7 @@ void B1DetectorConstruction::DefineMaterials()
     G4NistManager* nist = G4NistManager::Instance();
     world_mat = nist->FindOrBuildMaterial("G4_AIR");
     
-    G4int nEntries = 2;
+    const G4int nEntries = 2;
     G4String name;
     G4double density;
     G4int compNum;
@@ -128,8 +128,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
                           "logicOutCell");
   G4VPhysicalVolume* phyOutCell = 
       new G4PVPlacement(0, 
-                        fPmtPos,
-                        //G4ThreeVector(0, 0, 0),
+                        G4ThreeVector(0, 0, 0),
                         logicOutCell,
                         "phyOutCell",
                         logicWorld,
@@ -151,8 +150,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
 
     G4VPhysicalVolume* physPmt = 
         new G4PVPlacement(Rot,
-                          G4ThreeVector(410*mm, 0., 0.),
-                          //G4ThreeVector(424.75*mm, 0., 0.),
+                          fPmtPos,
                           logicPmt,
                           "physPmt",
                           logicWorld,

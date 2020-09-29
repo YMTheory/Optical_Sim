@@ -1,10 +1,19 @@
 /run/initialize
 
+# verbose config
 /control/verbose 0
 /run/verbose 0
 /tracking/verbose 0
 
+# detector config
+/B1/det/setCellXYSize 10 mm
+/B1/det/setPmtSize 30
+/B1/det/setPmtPos 410 0 0 mm
+/B1/det/setRindex 1.0
+
+# particle gun config
 /B1/gun/verbose 0
+/B1/gun/number 1000
 /B1/gun/particle opticalphoton
 /B1/gun/energytype Mono
 /B1/gun/energy 2.884 eV

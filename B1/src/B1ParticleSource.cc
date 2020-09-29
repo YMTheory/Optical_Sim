@@ -23,6 +23,7 @@ B1ParticleSource::B1ParticleSource ()  {
     particle_momentum_direction    = G4ParticleMomentum(1., 0., 0.);
     particle_time                  = 0.0;
     particle_energy                = 1.0*MeV;
+    particle_polarization          = G4ThreeVector(1., 0., 0.);
 
     SourcePosType                  = "Volume";
     Shape                          = "NULL";
@@ -298,9 +299,9 @@ void B1ParticleSource::GeneratePrimaryVertex(G4Event* event)  {
             new G4PrimaryParticle(particle_definition,px,py,pz);
         particle->SetMass( mass );
         //particle->SetCharge( particle_charge );
-        //particle->SetPolarization(particle_polarization.x(),
-        //        particle_polarization.y(),
-        //        particle_polarization.z());
+        particle->SetPolarization(particle_polarization.x(),
+                particle_polarization.y(),
+                particle_polarization.z());
         vertex->SetPrimary( particle );
         event->AddPrimaryVertex( vertex );
     }

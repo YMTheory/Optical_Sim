@@ -76,6 +76,7 @@ class B1ParticleSource : public G4VPrimaryGenerator {
         G4double                particle_energy;
         G4ThreeVector           particle_position;
         G4double                particle_time;
+        G4ThreeVector           particle_polarization;
 
 
         // Verbose
