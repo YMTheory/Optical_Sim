@@ -89,8 +89,10 @@ void B1EventAction::PrintEventStatistics(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1EventAction::BeginOfEventAction(const G4Event*)
-{;}
+void B1EventAction::BeginOfEventAction(const G4Event* evt)
+{
+    //G4cout << "Begin of Event " << evt->GetEventID() << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

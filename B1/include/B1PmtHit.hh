@@ -32,9 +32,10 @@ class B1PmtHit : public G4VHit
         virtual void Print();
 
         // Set methods
+        void SetTrackID(G4int trackId) { fTrackID = trackId; }
 
         // Get methods
-        G4double  GetTrackID() const;
+        G4int  GetTrackID() const;
 
     private:
         G4double fTrackID;
@@ -66,7 +67,7 @@ inline void B1PmtHit::operator delete(void *hit)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double B1PmtHit::GetTrackID() const {
+inline G4int B1PmtHit::GetTrackID() const {
     return fTrackID;
 }
 

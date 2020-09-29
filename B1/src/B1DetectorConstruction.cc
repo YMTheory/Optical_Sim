@@ -53,7 +53,11 @@
 B1DetectorConstruction::B1DetectorConstruction()
 : G4VUserDetectorConstruction(),
     fNofLayers(1)
-{ }
+{ 
+    fCellSize = 10.*mm;
+    fPmtSize  = 3.*cm;
+    fPmtPos   = G4ThreeVector(0, 0, 0);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,11 +79,13 @@ void B1DetectorConstruction::DefineMaterials()
     glass_mat = new G4Material(name="glass_mat", density=2.23*g/cm3, compNum=2);
     G4MaterialPropertiesTable* glass_mpt = new G4MaterialPropertiesTable();
     G4double glass_PhotonEnergy[nEntries] = {2.884*eV, 3.024*eV};
-    G4double glass_RIndex[nEntries] = {1.5, 1.5};
+    G4double glass_RIndex[nEntries] = {1.0, 1.0};
     glass_mpt->AddProperty("RINDEX", glass_PhotonEnergy, glass_RIndex, nEntries);
     glass_mat->SetMaterialPropertiesTable(glass_mpt);
     
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
 {  
@@ -111,7 +117,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
 
   // design of cuvette
   //
-  G4double outcell_sizeXY = 6.25*mm;
+  G4double outcell_sizeXY = 10.*mm; //6.25*mm;
   G4double outcell_sizeZ  = 22.5*mm;
   G4Box* solidOutCell = 
       new G4Box("solidOutCell", outcell_sizeXY, outcell_sizeXY, outcell_sizeZ);
@@ -132,7 +138,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
     // design of PMT
     //
     G4double pi = 3.14159265;
-    G4double pmt_Radius = 100.*cm; //3.0*cm;
+    G4double pmt_Radius = 3.0*cm;
     G4double pmt_Length = 20.0*cm;
     G4Tubs* solidPmt = new G4Tubs("solidPmt", 0, pmt_Radius, pmt_Length/2, 0, 2*pi);
     G4LogicalVolume* logicPmt = 
@@ -144,7 +150,8 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
 
     G4VPhysicalVolume* physPmt = 
         new G4PVPlacement(Rot,
-                          G4ThreeVector(424.75*mm, 0., 0.),
+                          G4ThreeVector(410*mm, 0., 0.),
+                          //G4ThreeVector(424.75*mm, 0., 0.),
                           logicPmt,
                           "physPmt",
                           logicWorld,

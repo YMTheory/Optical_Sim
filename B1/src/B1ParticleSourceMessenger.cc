@@ -7,6 +7,7 @@
 #include "B1ParticleSourceMessenger.hh"
 #include "B1ParticleSource.hh"
 
+#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4ThreeVector.hh"
@@ -16,6 +17,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -65,7 +67,13 @@ B1ParticleSourceMessenger::B1ParticleSourceMessenger
     angtypeCmd->SetGuidance("Possible variables are: iso direction");
     angtypeCmd->SetParameterName("AngDis",true,true);
     angtypeCmd->SetDefaultValue("iso");
-    angtypeCmd->SetCandidates("iso HalfSphere direction");
+    angtypeCmd->SetCandidates("iso HalfSphere direction custom");
+
+    // angular limit
+    angLimitCmd = new G4UIcmdWithADouble("/B1/gun/anglimit", this);
+    angLimitCmd->SetGuidance("Set angular limit");
+    angLimitCmd->SetParameterName("AngLimit", true, true);
+    angLimitCmd->SetDefaultValue(0.3);
 
 
     positionCmd = new G4UIcmdWith3VectorAndUnit("/B1/gun/position",this);
@@ -129,6 +137,7 @@ B1ParticleSourceMessenger::~B1ParticleSourceMessenger()
     delete directionCmd;
     delete energyCmd;
     delete angtypeCmd;
+    delete angLimitCmd;
 
     delete gunDirectory;
 }
@@ -157,6 +166,10 @@ void B1ParticleSourceMessenger::SetNewValue
 
     else if ( cmd == angtypeCmd ) {
         fParticleGun->SetAngDistType(newValues);
+    } 
+
+    else if ( cmd == angLimitCmd ) {
+        fParticleGun->SetAngLimit(angLimitCmd->GetNewDoubleValue(newValues));
     }
 
     else if ( cmd == listCmd )

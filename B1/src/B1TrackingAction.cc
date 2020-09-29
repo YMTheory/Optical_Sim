@@ -17,7 +17,7 @@ B1TrackingAction::~B1TrackingAction()
 
 void B1TrackingAction::PreUserTrackingAction( const G4Track* track )
 {
-    G4cout << "Particle ID: " << track->GetTrackID() << G4endl;
+
 }
 
 void B1TrackingAction::PostUserTrackingAction ( const G4Track* ) 

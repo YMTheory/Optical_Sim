@@ -17,7 +17,7 @@
 
 B1ParticleSource::B1ParticleSource ()  {
 
-    NumberOfParticlesToBeGenerated = 10; 
+    NumberOfParticlesToBeGenerated = 10000; 
     particle_definition            = NULL;
     G4ThreeVector zero (0., 0., 0.);
     particle_momentum_direction    = G4ParticleMomentum(1., 0., 0.);
@@ -33,6 +33,7 @@ B1ParticleSource::B1ParticleSource ()  {
     MaxTheta                       = pi;
     MinPhi                         = 0.;
     MaxPhi                         = twopi;
+    custom_angle                   = pi/2.;
 
     EnergyDisType                  = "Mono";
     MonoEnergy                     = 1*MeV;
@@ -75,6 +76,12 @@ void B1ParticleSource::SetAngDistType(G4String atype)
 {
     AngDistType = atype;
 }
+
+void B1ParticleSource::SetAngLimit( G4double angle )
+{
+    custom_angle = angle;
+}
+
 
 void B1ParticleSource::SetParticleMomentumDirection
 (G4ParticleMomentum aDirection)  {
@@ -153,6 +160,50 @@ void B1ParticleSource::GenerateHalfSphere()
 }
 
 
+void B1ParticleSource::GenerateCustomAngle()
+{
+
+    G4double rndm, rndm2;
+    G4double px, py, pz;
+    G4double sintheta, sinphi, costheta, cosphi;
+    while(1) {
+        rndm = G4UniformRand();
+        costheta = std::cos(MinTheta) - rndm * (std::cos(MinTheta) - std::cos(MaxTheta));
+        sintheta = std::sqrt(1. - costheta*costheta);
+
+        rndm2 = G4UniformRand();
+        Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
+        sinphi = std::sin(Phi);
+        cosphi = std::cos(Phi);
+
+        px = -sintheta * cosphi;
+        py = -sintheta * sinphi;
+        pz = -costheta;
+
+        G4double ResMag = std::sqrt((px*px) + (py*py) + (pz*pz));
+        px = px/ResMag;
+        py = py/ResMag;
+        pz = pz/ResMag;
+
+        if ( px <=0 ) continue;
+        G4double m_angle = std::acos(px);
+        if( m_angle>=custom_angle ) continue;
+
+        particle_momentum_direction.setX(px);
+        particle_momentum_direction.setY(py);
+        particle_momentum_direction.setZ(pz);
+
+        break;
+    }
+    // particle_momentum_direction now holds unit momentum vector.
+    if(verbosityLevel >= 2)
+        G4cout << "Generating half sphere vector: " << particle_momentum_direction << G4endl;
+
+
+}
+
+
+
 void B1ParticleSource::SetEnergyDisType(G4String DisType)
 {
     EnergyDisType = DisType;
@@ -207,6 +258,8 @@ void B1ParticleSource::GeneratePrimaryVertex(G4Event* event)  {
             GenerateHalfSphere();
         else if( AngDistType == "direction" )
             SetParticleMomentumDirection(particle_momentum_direction);
+        else if ( AngDistType == "custom" )
+            GenerateCustomAngle();
 
 
         // Energy Stuff

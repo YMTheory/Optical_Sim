@@ -33,11 +33,11 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Material.hh"
+#include "G4ThreeVector.hh"
 #include "globals.hh"
-#include "tls.hh"
+#include "B1DetectorConstructionMessenger.hh"
 
 class G4VPhysicalVolume;
-class G4LogicalVolume;
 
 /// Detector construction class to define materials and geometry.
 
@@ -54,8 +54,20 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
         G4VPhysicalVolume* DefineVolumes();
 
 
-    protected:
-        G4VPhysicalVolume* fDetector;
+    private:
+        B1DetectorConstructionMessenger* fMessenger;
+    
+    public:
+        G4double GetCellSize() { return fCellSize; }
+        void SetCellSize(G4double size) { fCellSize = size; }
+
+        G4double GetPmtSize()  { return fPmtSize;  }
+        void SetPmtSize(G4double size) { fPmtSize = size; }
+
+        G4ThreeVector GetPmtPos()  { return fPmtPos; }
+        void SetPmtPos(G4ThreeVector pos) { fPmtPos = pos; }
+
+
 
     private:
         G4bool fCheckOverlaps;
@@ -63,6 +75,10 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
 
         G4Material* world_mat;
         G4Material* glass_mat;
+
+        G4double        fCellSize;
+        G4double        fPmtSize;
+        G4ThreeVector   fPmtPos;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

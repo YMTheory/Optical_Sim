@@ -31,9 +31,11 @@ class B1ParticleSource : public G4VPrimaryGenerator {
 
         // angular distribution
         void SetAngDistType(G4String);
+        void SetAngLimit(G4double);
         void SetParticleMomentumDirection(G4ParticleMomentum);
         void GenerateIsotropicFlux();
         void GenerateHalfSphere();
+        void GenerateCustomAngle();
 
         // energy distribution
         void SetEnergyDisType(G4String);
@@ -58,6 +60,7 @@ class B1ParticleSource : public G4VPrimaryGenerator {
         G4String AngDistType;
         G4double MinTheta, MaxTheta, MinPhi, MaxPhi;
         G4double Phi;
+        G4double custom_angle;
 
         // energy distribution
         G4String EnergyDisType;

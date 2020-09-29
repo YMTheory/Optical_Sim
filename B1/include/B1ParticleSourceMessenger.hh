@@ -17,6 +17,7 @@ class G4UIcommand;
 class G4UImessenger;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
+class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3Vector;
 class G4UIcmdWith3VectorAndUnit;
@@ -47,6 +48,7 @@ class B1ParticleSourceMessenger: public G4UImessenger {
         G4UIcmdWith3Vector           *directionCmd;
         G4UIcmdWithADoubleAndUnit    *energyCmd;
         G4UIcmdWithAString           *angtypeCmd;
+        G4UIcmdWithADouble           *angLimitCmd;
         G4UIcmdWithAString           *energytypeCmd;
         G4UIcmdWithAnInteger         *verbosityCmd;
         G4UIcmdWithoutParameter      *listCmd;

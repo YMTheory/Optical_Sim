@@ -37,16 +37,13 @@ void B1PmtSD::Initialize(G4HCofThisEvent* hce)
     hce->AddHitsCollection( hcID, fHitsCollection );
 
     // Create hits
-    for( G4int i=0; i<fNofPmts+1; i++ )  {
-        fHitsCollection->insert(new B1PmtHit());
-    }
+    //for( G4int i=0; i<fNofPmts+1; i++ )  {
+    //    fHitsCollection->insert(new B1PmtHit());
+    //}
 }
 
 G4bool B1PmtSD::ProcessHits( G4Step* aStep, G4TouchableHistory*)
 {
-    
-    G4cout << "SD Hit Info : " << aStep->GetTrack()->GetTrackID() << G4endl;
-
     G4double edep = aStep->GetTotalEnergyDeposit();
     G4double stepLength = aStep->GetStepLength();
     if(edep == 0. && stepLength == 0. ) return false;
@@ -56,14 +53,19 @@ G4bool B1PmtSD::ProcessHits( G4Step* aStep, G4TouchableHistory*)
     // Get pmt id
     auto pmtNumber = touchable->GetReplicaNumber(1);
 
-    auto hit = (*fHitsCollection)[pmtNumber];
-    if ( ! hit ) {
-        G4ExceptionDescription msg;
-        msg << "Cannot access hit " << pmtNumber; 
-        G4Exception("B4cCalorimeterSD::ProcessHits()",
-                "MyCode0004", FatalException, msg);
-    }         
+    //auto hit = (*fHitsCollection)[pmtNumber];
+    //if ( ! hit ) {
+    //    G4ExceptionDescription msg;
+    //    msg << "Cannot access hit " << pmtNumber; 
+    //    G4Exception("B4cCalorimeterSD::ProcessHits()",
+    //            "MyCode0004", FatalException, msg);
+    //}         
 
+    B1PmtHit* hit = new B1PmtHit();
+    G4int trackId = aStep->GetTrack()->GetTrackID();
+    hit->SetTrackID(trackId);
+
+    fHitsCollection->insert(hit);
 
     return true;
 }
