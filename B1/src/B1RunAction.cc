@@ -45,6 +45,7 @@ B1RunAction::B1RunAction()
 {
     // set printing event number per each event
     G4RunManager::GetRunManager()->SetPrintProgress(1);
+    B1AnalysisManager* analysis = B1AnalysisManager::getInstance();
     
     // Create analysis manager
     //auto analysisManager = G4AnalysisManager::Instance();

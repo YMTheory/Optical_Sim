@@ -29,7 +29,6 @@ class B1AnalysisMessenger : public G4UImessenger
         B1AnalysisManager* b1Analysis;
         G4UIdirectory* b1AnalysisDir;
         G4UIcmdWithAString* outputFileCmd;
-        G4UIcmdWithAString* testCmd;
 
 };
 #endif

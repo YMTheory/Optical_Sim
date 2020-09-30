@@ -13,12 +13,6 @@ B1AnalysisMessenger::B1AnalysisMessenger(
     b1AnalysisDir = new G4UIdirectory("/B1/analy/");
     b1AnalysisDir->SetGuidance("analysis control");
 
-    testCmd = new G4UIcmdWithAString("/B1/analy/test", this);
-    testCmd->SetGuidance("test command");
-    testCmd->SetParameterName("test", true, true);
-    testCmd->SetDefaultValue("aa");
-
-
     outputFileCmd = new G4UIcmdWithAString("/B1/analy/outputFile", this);
     outputFileCmd->SetGuidance("specify output file name");
     outputFileCmd->SetParameterName("choice", true);
@@ -29,7 +23,7 @@ B1AnalysisMessenger::B1AnalysisMessenger(
 
 B1AnalysisMessenger::~B1AnalysisMessenger()
 {
-    //delete b1AnalysisDir;
+    delete b1AnalysisDir;
     delete outputFileCmd;
 }
 

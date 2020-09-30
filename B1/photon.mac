@@ -22,4 +22,6 @@
 /B1/gun/type Point
 /B1/gun/anglimit 0.3
 
-/run/beamOn 1000
+/B1/analy/test bb
+
+/run/beamOn 100

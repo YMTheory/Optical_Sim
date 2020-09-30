@@ -18,7 +18,7 @@ B1AnalysisManager::B1AnalysisManager()
     // creating the messenger
     analysisMessenger = new B1AnalysisMessenger(this);
 
-    G4cout << " ++++++++++++++++++ B1AnalysisManager created" << G4endl;
+    G4cout << " +++++ B1AnalysisManager created" << G4endl;
 }
 
 B1AnalysisManager::~B1AnalysisManager()
