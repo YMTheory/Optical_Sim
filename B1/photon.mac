@@ -7,7 +7,7 @@
 
 # detector config
 /B1/det/setCellXYSize 10 mm
-/B1/det/setPmtSize 30
+/B1/det/setPmtSize 30 mm
 /B1/det/setPmtPos 410 0 0 mm
 /B1/det/setRindex 1.0
 

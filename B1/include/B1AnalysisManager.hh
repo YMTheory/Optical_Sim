@@ -7,6 +7,11 @@
 #ifndef B1AnalysisManager_h
 #define B1AnalysisManager_h 1
 
+#include "globals.hh"
+#include "B1AnalysisMessenger.hh"
+
+class B1AnalysisMessenger;
+
 class B1AnalysisManager  {
     
     public:
@@ -27,12 +32,16 @@ class B1AnalysisManager  {
         void analyseEventID(G4int evtid);
         void analyseAddNtupleRow();
 
+
     private:
         B1AnalysisManager();
 
         G4String outputFileName;
 
         static B1AnalysisManager* instance;
+        
+        B1AnalysisMessenger* analysisMessenger;
+
 };
 
 #endif
