@@ -12,6 +12,7 @@ class G4UIdirectory;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
+class G4UIcmdWithAString;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"

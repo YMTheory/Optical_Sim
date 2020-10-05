@@ -113,28 +113,20 @@ void B1EventAction::EndOfEventAction(const G4Event* event)
     // Get hits collections
     auto pmtHC = GetHitsCollection(fPmtID, event);
 
-    // Get hit with total values
-    auto pmtHit = (*pmtHC)[pmtHC->entries()-1];
+    if ( pmtHC->entries()>0 ) {
+        // Get hit with total values
+        auto pmtHit = (*pmtHC)[pmtHC->entries()-1];
 
-    // Print per event
-    auto eventID = event->GetEventID();
-    auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
-    if( ( printModulo > 1 ) && ( eventID % printModulo == 0 ) ) {
-        G4cout << "---> End of event: " << eventID << G4endl;     
-        PrintEventStatistics( pmtHit->GetTrackID() );
+        // Print per event
+        auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+        if( ( printModulo > 1 ) && ( evtid % printModulo == 0 ) ) {
+            G4cout << "---> End of event: " << evtid << G4endl;     
+            PrintEventStatistics( pmtHit->GetTrackID() );
+        }
+        analysis->analysePhotonNumber(pmtHC->entries());
+    }  else  {  // no hits in SD
+        analysis->analysePhotonNumber(0);
     }
-
-    // Fill ntuple
-    //
-    // get analysis manager
-    //auto analysisManager = G4AnalysisManager::Instance();
-
-    //// fill ntuple
-    //analysisManager->FillNtupleIColumn( 0, pmtHit->GetTrackID() );
-    //analysisManager->FillNtupleIColumn( 1, pmtHC->entries() );
-    //analysisManager->AddNtupleRow();
-
-    analysis->analysePhotonNumber(pmtHC->entries());
 
     analysis->analyseAddNtupleRow();
 }

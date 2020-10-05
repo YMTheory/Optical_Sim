@@ -11,6 +11,7 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
+#include "G4UIcmdWithAString.hh"
 
 B1DetectorConstructionMessenger::
 B1DetectorConstructionMessenger( B1DetectorConstruction* mpga )

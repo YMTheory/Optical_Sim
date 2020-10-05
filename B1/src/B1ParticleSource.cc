@@ -173,18 +173,29 @@ void B1ParticleSource::GenerateCustomAngle()
     G4double px, py, pz;
     G4double sintheta, sinphi, costheta, cosphi;
     while(1) {
+        //rndm = G4UniformRand();
+        //costheta = std::cos(MinTheta) - rndm * (std::cos(MinTheta) - std::cos(MaxTheta));
+        //sintheta = std::sqrt(1. - costheta*costheta);
+
+        //rndm2 = G4UniformRand();
+        //Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
+        //sinphi = std::sin(Phi);
+        //cosphi = std::cos(Phi);
+
+        // sample theta, phi: 
+        G4double custom_cos = std::cos(custom_angle);
         rndm = G4UniformRand();
-        costheta = std::cos(MinTheta) - rndm * (std::cos(MinTheta) - std::cos(MaxTheta));
-        sintheta = std::sqrt(1. - costheta*costheta);
+        costheta = 2*custom_cos*rndm - custom_cos;
+        sintheta = std::sqrt(1 - costheta*costheta);
 
         rndm2 = G4UniformRand();
-        Phi = MinPhi + (MaxPhi - MinPhi) * rndm2; 
-        sinphi = std::sin(Phi);
+        Phi = 2*custom_angle*rndm2 - custom_angle;
         cosphi = std::cos(Phi);
+        sinphi = std::sin(Phi);
 
-        px = -sintheta * cosphi;
-        py = -sintheta * sinphi;
-        pz = -costheta;
+        px = sintheta * cosphi;
+        py = sintheta * sinphi;
+        pz = costheta;
 
         G4double ResMag = std::sqrt((px*px) + (py*py) + (pz*pz));
         px = px/ResMag;

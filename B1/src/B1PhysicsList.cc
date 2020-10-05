@@ -48,19 +48,26 @@ void B1PhysicsList::ConstructOpticalProcess()
     G4OpAbsorption* theAbsProcess     = new G4OpAbsorption();
     G4OpRayleigh* theRayProcess       = new G4OpRayleigh();
     G4OpBoundaryProcess* theBdProcess = new G4OpBoundaryProcess();
-    auto particleIterator=GetParticleIterator();
+    theBdProcess->SetInvokeSD(false);
+    auto particleIterator = GetParticleIterator();
     particleIterator->reset();
     while( (*particleIterator)() ){
+
         G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         if (theAbsProcess->IsApplicable(*particle)) {
-            pmanager -> AddProcess(theAbsProcess);
+            pmanager -> AddDiscreteProcess(theAbsProcess);
+            G4cout << " ===> Registered Absorption Process " << G4endl;
         }
+
         if(theRayProcess->IsApplicable(*particle)) {
-            pmanager -> AddProcess(theRayProcess);
+            pmanager -> AddDiscreteProcess(theRayProcess);
+            G4cout << " ===> Registered Rayleigh Scatterinng Process " << G4endl;
         }
+
         if(theBdProcess->IsApplicable(*particle)) {
-            pmanager -> AddProcess(theBdProcess);
+            pmanager -> AddDiscreteProcess(theBdProcess);
+            G4cout << " ===> Registered Boundary Process " << G4endl;
         }
     }
 }
