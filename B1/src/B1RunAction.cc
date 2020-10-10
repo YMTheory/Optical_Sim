@@ -46,20 +46,6 @@ B1RunAction::B1RunAction()
     // set printing event number per each event
     G4RunManager::GetRunManager()->SetPrintProgress(1);
     B1AnalysisManager* analysis = B1AnalysisManager::getInstance();
-    
-    // Create analysis manager
-    //auto analysisManager = G4AnalysisManager::Instance();
-    //G4cout << "Using " << analysisManager->GetType() << G4endl;
-
-    //analysisManager->SetVerboseLevel(1);
-    //analysisManager->SetNtupleMerging(true);
-
-    //// Book ntuples:
-    //analysisManager->CreateNtuple("B1", "Hits Info in SD");
-    //analysisManager->CreateNtupleIColumn("TrackID");
-    //analysisManager->CreateNtupleIColumn("nPhoton");
-    //analysisManager->FinishNtuple();
-    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,11 +61,6 @@ void B1RunAction::BeginOfRunAction(const G4Run*)
 {
     G4cout << "Begin of One Run" << G4endl;
 
-    //auto analysisManager = G4AnalysisManager::Instance();
-    //// Open an output file
-    //G4String fileName = "B1";
-    //analysisManager->OpenFile(fileName);
-
     B1AnalysisManager* analysis = B1AnalysisManager::getInstance();
     analysis->book();
 }
@@ -88,10 +69,6 @@ void B1RunAction::BeginOfRunAction(const G4Run*)
 
 void B1RunAction::EndOfRunAction(const G4Run* )
 {
-    auto analysisManager = G4AnalysisManager::Instance();
-    // save ntuples
-    analysisManager->Write();
-    analysisManager->CloseFile();
     B1AnalysisManager* analysis = B1AnalysisManager::getInstance();
     analysis->finish();
 }

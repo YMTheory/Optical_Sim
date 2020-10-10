@@ -13,6 +13,7 @@ class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWith3VectorAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -36,6 +37,9 @@ class B1DetectorConstructionMessenger : public G4UImessenger
         G4UIcmdWithADoubleAndUnit*      fPmtSizeCmd;
         G4UIcmdWith3VectorAndUnit*      fPmtPosCmd;
         G4UIcmdWithADouble*             fRindexCmd;
+
+        // aperture configuration
+        G4UIcmdWithAnInteger*           fNAptCmd;
 };
 
 #endif

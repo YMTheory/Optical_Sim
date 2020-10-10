@@ -8,7 +8,7 @@ void rindex_ana()
     vec_rindex.push_back(14);
     vec_rindex.push_back(15);
 
-    string name1 = "/junofs/users/yumiao/simulation/Rayleigh/Simulation/jobs/rindex";
+    string name1 = "/junofs/users/yumiao/simulation/Rayleigh/Simulation/jobs/point/rindex";
     string name3 = ".root";
 
     TGraphErrors* gPhoton = new TGraphErrors();

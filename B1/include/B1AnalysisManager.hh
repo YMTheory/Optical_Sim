@@ -30,6 +30,7 @@ class B1AnalysisManager  {
 
         void analysePhotonNumber(G4int number);
         void analyseEventID(G4int evtid);
+        void analyseInitPhotonNumber(G4int number);
         void analyseAddNtupleRow();
 
 

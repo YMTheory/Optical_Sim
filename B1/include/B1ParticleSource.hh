@@ -30,7 +30,9 @@ class B1ParticleSource : public G4VPrimaryGenerator {
         void SetPosDisType(G4String);
         void SetPosDisShape(G4String);
         void SetCentreCoords(G4ThreeVector);
+        void SetSourceLength(G4double);
         void GeneratePointSource();
+        void GenerateLineSource();
 
         // angular distribution
         void SetAngDistType(G4String);
@@ -58,6 +60,7 @@ class B1ParticleSource : public G4VPrimaryGenerator {
         G4String                SourcePosType;
         G4String                Shape;
         G4ThreeVector           CentreCoords;
+        G4double                SourceLength;
         
         // angular distribution
         G4String AngDistType;
@@ -77,7 +80,8 @@ class B1ParticleSource : public G4VPrimaryGenerator {
         G4ThreeVector           particle_position;
         G4double                particle_time;
         G4ThreeVector           particle_polarization;
-
+    
+        //std::vector<G4double>   vec_particle_y;
 
         // Verbose
         G4int verbosityLevel;

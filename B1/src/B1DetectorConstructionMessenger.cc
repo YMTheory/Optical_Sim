@@ -12,6 +12,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 B1DetectorConstructionMessenger::
 B1DetectorConstructionMessenger( B1DetectorConstruction* mpga )
@@ -43,6 +44,10 @@ B1DetectorConstructionMessenger( B1DetectorConstruction* mpga )
     fRindexCmd->SetParameterName("Rindex", true, true);
     fRindexCmd->SetDefaultValue(1.5);
 
+    fNAptCmd = new G4UIcmdWithAnInteger("/B1/det/setNApt", this);
+    fNAptCmd->SetGuidance("Set Aperture number");
+    fNAptCmd->SetDefaultValue(1);
+
 }   
 
 B1DetectorConstructionMessenger::
@@ -71,6 +76,10 @@ void B1DetectorConstructionMessenger::SetNewValue(
     
     else if ( cmd == fRindexCmd ) {
         fTarget->SetRindex( fRindexCmd->GetNewDoubleValue(newValue));
+    }
+
+    else if ( cmd == fNAptCmd ) {
+        fTarget->SetAptNumber( fNAptCmd->GetNewIntValue(newValue) );
     }
 
     else 

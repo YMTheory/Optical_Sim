@@ -6,6 +6,7 @@
 
 
 #include "B1ParticleSource.hh"
+#include "B1AnalysisManager.hh"
 
 #include "G4Event.hh"
 #include "G4PhysicalConstants.hh"
@@ -25,9 +26,10 @@ B1ParticleSource::B1ParticleSource ()  {
     particle_energy                = 1.0*MeV;
     particle_polarization          = G4ThreeVector(1., 0., 0.);
 
-    SourcePosType                  = "Volume";
+    SourcePosType                  = "Point";
     Shape                          = "NULL";
     CentreCoords                   = zero;
+    SourceLength                   = 2*mm;
 
     AngDistType                    = "iso";
     MinTheta                       = 0.;
@@ -76,6 +78,29 @@ void B1ParticleSource::GeneratePointSource()
             G4cout << "Error SourcePosType is not set to Point" << G4endl;
     }
 }
+
+void B1ParticleSource::SetSourceLength(G4double length)
+{
+    SourceLength = length;
+}
+
+
+void B1ParticleSource::GenerateLineSource()
+{
+    // generate particles along a line on y-axis
+    if ( SourcePosType = "Line" ) {
+    G4double rndm;
+    G4double y_pos;
+    rndm = G4UniformRand();
+    y_pos = rndm * SourceLength - SourceLength/2.;
+
+    particle_position = G4ThreeVector(0, y_pos, 0);
+    } else {
+        if(verbosityLevel >= 1)
+            G4cout << "Error SourcePosType is not set to Line" << G4endl;
+    }
+}
+
 
 
 void B1ParticleSource::SetAngDistType(G4String atype) 
@@ -257,16 +282,21 @@ void B1ParticleSource::GeneratePrimaryVertex(G4Event* event)  {
         return;
     }
 
+
+    B1AnalysisManager* analysis = B1AnalysisManager::getInstance();
+    analysis->analyseInitPhotonNumber(NumberOfParticlesToBeGenerated);
+
     for( G4int i=0; i<NumberOfParticlesToBeGenerated; i++ ) {
         // Position
         if( SourcePosType == "Point" ) {
             GeneratePointSource();
+        } else if( SourcePosType == "Line" ) {
+            GenerateLineSource();
         } else {
             G4cout << "Error:: SourcePosType undefined" << G4endl;
             G4cout << "Generating point source" << G4endl;
             GeneratePointSource();
         }
-
 
         // Angular Stuff
         if(AngDistType == "iso" )

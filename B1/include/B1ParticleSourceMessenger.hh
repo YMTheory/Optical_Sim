@@ -43,6 +43,7 @@ class B1ParticleSourceMessenger: public G4UImessenger {
         G4UIcmdWithAnInteger         *numberCmd;
         G4UIcmdWithAString           *particleCmd;
         G4UIcmdWithAString           *typeCmd;
+        G4UIcmdWithADoubleAndUnit    *lengthCmd;
         G4UIcmdWithAString           *shapeCmd;
         G4UIcmdWith3VectorAndUnit    *centreCmd;
         G4UIcmdWith3VectorAndUnit    *positionCmd;

@@ -96,7 +96,14 @@ B1ParticleSourceMessenger::B1ParticleSourceMessenger
     typeCmd->SetGuidance("Only Point Implemented");
     typeCmd->SetParameterName("DisType", true, true);
     typeCmd->SetDefaultValue("Point");
-    typeCmd->SetCandidates("Point");
+    typeCmd->SetCandidates("Point Line");
+
+    // source length 
+    lengthCmd = new G4UIcmdWithADoubleAndUnit("/B1/gun/length", this);
+    lengthCmd->SetGuidance("set particle position length");
+    lengthCmd->SetParameterName("PosLength", true, true);
+    lengthCmd->SetDefaultUnit("mm");
+    lengthCmd->SetDefaultValue(2);
 
     // source shape
     shapeCmd = new G4UIcmdWithAString("/B1/gun/shape", this);
@@ -159,6 +166,9 @@ void B1ParticleSourceMessenger::SetNewValue
 
     else if ( cmd == shapeCmd )
         fParticleGun->SetPosDisShape(newValues);
+
+    else if ( cmd == lengthCmd ) 
+        fParticleGun->SetSourceLength( lengthCmd->GetNewDoubleValue(newValues) );
 
     else if ( cmd == centreCmd ) 
         fParticleGun->SetCentreCoords( centreCmd->GetNew3VectorValue(newValues) );

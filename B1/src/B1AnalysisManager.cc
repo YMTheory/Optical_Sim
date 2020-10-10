@@ -42,6 +42,8 @@ void B1AnalysisManager::book()
     man->CreateNtuple("photon", "Hits Info on SD");
     man->CreateNtupleIColumn("EventID");
     man->CreateNtupleIColumn("nPhoton");
+    man->CreateNtupleIColumn("nInitPhoton");
+    man->CreateNtupleDColumn("InitPosY");
     man->FinishNtuple();
     G4cout << "Created ntuple for photon counting" << G4endl;
 }
@@ -80,6 +82,13 @@ void B1AnalysisManager::analysePhotonNumber(G4int number)
     G4AnalysisManager *man = G4AnalysisManager::Instance();
     man->FillNtupleIColumn( 1, number );
 }
+
+void B1AnalysisManager::analyseInitPhotonNumber(G4int number)
+{
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+    man->FillNtupleIColumn( 2, number );
+}
+
 
 void B1AnalysisManager::analyseAddNtupleRow()
 {
