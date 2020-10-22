@@ -39,14 +39,16 @@ B1DetectorConstruction::B1DetectorConstruction()
     : G4VUserDetectorConstruction(),
     fCheckOverlaps(true),fblack(NULL),fmetal(NULL), air(NULL)
 { 
-    fRindex = 1.5;
-    fCellXYSize = 10.*mm;
-    fPmtSize  = 30.*mm;
-    fPmtPos   = G4ThreeVector(500.*mm, 0, 0);
-    fAptNumber = 3;
-    fAptSize = {2*mm, 2*mm, 2*mm};
-    fAptPos  = {10*mm, 50*mm, 100*mm};
-    fAptShape = {0, 0, 0};
+    fRindex       = 1.5;
+    fCellXYSize   = 10.*mm;
+    fPmtSize      = 30.*mm;
+    fPmtPos       = G4ThreeVector(500.*mm, 0, 0);
+    fAptMode      = 0;  // 0 for all, 1 for one by one
+    fAptNumber    = 0;
+    fAptSize      = {};
+    fAptPos       = {};
+    fAptShape     = {};
+    fAptRot       = {};
 
     fMessenger = new B1DetectorConstructionMessenger(this);
 }
@@ -89,7 +91,7 @@ void B1DetectorConstruction::DefineMaterials()
 
     fblack = new G4Material(name="black",density=1*g/cm3,compNum=3);
     G4MaterialPropertiesTable* black_MPT = new G4MaterialPropertiesTable;
-    black_MPT -> AddConstProperty("theAbsorption",1.0);
+    black_MPT -> AddConstProperty("theAbsorption", 1.0);
     fblack -> SetMaterialPropertiesTable(black_MPT);
 
     //
@@ -153,7 +155,7 @@ G4LogicalVolume* B1DetectorConstruction::PmtConstruction()
 
 G4LogicalVolume* B1DetectorConstruction::RoundAptConstruction(G4double in_radius, G4double out_radius)
 {
-    G4double apt_length = 0.5*mm;
+    G4double apt_length = 1.5*mm;
     G4Tubs* solidApt = new G4Tubs("solidApt", in_radius, out_radius, apt_length/2., 0, 2*pi);
     G4LogicalVolume* logicApt = 
             new G4LogicalVolume(
@@ -166,14 +168,18 @@ G4LogicalVolume* B1DetectorConstruction::RoundAptConstruction(G4double in_radius
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4LogicalVolume* B1DetectorConstruction::SquareAptConstruction(G4double xy, G4double out_radius)
+G4LogicalVolume* B1DetectorConstruction::SquareAptConstruction(G4double xy, G4double out_radius, G4double ang)
 {
-    G4double z = 0.5*mm;
+    G4double z = 1.5*mm;
     G4Tubs* solidAptOut = new G4Tubs("solidAptOut", 0, out_radius, z, 0, 2*pi);
     G4Box*  solidApt    = new G4Box("solidApt", xy, xy, z);
+    G4RotationMatrix* rot = new G4RotationMatrix();
+    rot->rotateX(ang);
+    G4SubtractionSolid* subApt = 
+        new G4SubtractionSolid("subApt",solidAptOut, solidApt, rot, G4ThreeVector());
     G4LogicalVolume* logicApt = 
             new G4LogicalVolume(
-                    solidApt,
+                    subApt,
                     fblack,
                     "logicApt"
                 );
@@ -213,6 +219,40 @@ void B1DetectorConstruction::SetAptShape(G4int* shape)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void B1DetectorConstruction::SetAptConfigMode(G4int mode)
+{
+    fAptMode =  mode;  // 0 for all, 1 for one by one
+}
+
+void B1DetectorConstruction::ClearAptConfig()
+{
+    fAptShape.clear();
+    fAptSize.clear();
+    fAptPos.clear();
+    fAptRot.clear();
+}
+
+void B1DetectorConstruction::SetOneAptShape(G4int shape)
+{
+    fAptShape.push_back(shape);
+}
+
+void B1DetectorConstruction::SetOneAptSize(G4double size)
+{
+    fAptSize.push_back(size);
+}
+
+void B1DetectorConstruction::SetOneAptPos(G4double pos)
+{
+    fAptPos.push_back(pos);
+}
+
+void B1DetectorConstruction::SetOneAptRot(G4double ang)
+{
+    fAptRot.push_back(ang);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
 {
@@ -247,6 +287,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
     yRot->rotateY(pi/2.*rad);
 
 
+    //////////////////////////////////////////////////////////////////////////////////////////////
     // optical surface definition
     // black - air
     G4OpticalSurface* OpticalAirBlack = new G4OpticalSurface("AirBlackface");
@@ -254,7 +295,8 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
     OpticalAirBlack -> SetType(dielectric_dielectric);
     OpticalAirBlack -> SetFinish(polishedfrontpainted);
     G4MaterialPropertiesTable* AirBlackMPT = new G4MaterialPropertiesTable();
-    AirBlackMPT->AddConstProperty("REFLECTIVITY",0.);
+    //AirBlackMPT->AddConstProperty("REFLECTIVITY",0.);
+    //AirBlackMPT->AddConstProperty("theAbsorption",1.);
     OpticalAirBlack->SetMaterialPropertiesTable(AirBlackMPT);
 
     // air - glass
@@ -276,6 +318,17 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
     OpticalAirPMMA->SetMaterialPropertiesTable(myST1);
 
     //////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Visualization attributes
+    G4VisAttributes* boxVisAtt = new G4VisAttributes(G4Colour(0, 1, 1));
+    boxVisAtt->SetForceSolid ();
+    G4VisAttributes* tubVisAtt = new G4VisAttributes(G4Colour(1, 0, 1));
+    tubVisAtt->SetForceSolid();
+    G4VisAttributes* aptVisAtt = new G4VisAttributes(G4Colour(0.5, 0.5, 1));
+    aptVisAtt->SetForceSolid();
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+
 
     // Geometry Construction Part
 
@@ -308,39 +361,42 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
     //
 
     G4LogicalVolume* logicCell = CellConstruction();
-    //G4VPhysicalVolume* physCell = 
-    //    new G4PVPlacement(0,                       
-    //            G4ThreeVector(0, 0, 0), 
-    //            logicCell,                
-    //            "physCell",              
-    //            worldLV,              
-    //            false,                   
-    //            0,                       
-    //            fCheckOverlaps);  
+    G4VPhysicalVolume* physCell = 
+        new G4PVPlacement(0,                       
+                G4ThreeVector(0, 0, 0), 
+                logicCell,                
+                "physCell",              
+                worldLV,              
+                false,                   
+                0,                       
+                fCheckOverlaps);  
     //new G4LogicalBorderSurface("Air/PMMA Surface0",worldPV, physCell, OpticalAirPMMA); // optical surface
-
+    logicCell   ->  SetVisAttributes(boxVisAtt);  // set visualization
 
 
     // design of aperture:
-    G4double vec_aptsize[3] = {2*mm, 2*mm, 2*mm};
-    G4double vec_aptpos[3]  = {15.25*mm, 87.6*mm, 229.7*mm};
-    G4double aptOutRadius = 30*mm;
-    SetAptSize(vec_aptsize);
-    SetAptPos(vec_aptpos);
     
+    if(fAptMode == 0) {   // set all apt in one time
+        G4double vec_aptsize[3] = {2*mm, 2.5*mm, 2*mm};
+        G4double vec_aptpos[3]  = {15.25*mm, 87.6*mm, 229.7*mm};
+        SetAptSize(vec_aptsize);
+        SetAptPos(vec_aptpos);
+    }
+
     const int apt_num = fAptNumber;
+    G4double aptOutRadius = 30*mm;  // out radius for aperture
     G4LogicalVolume* vec_logicApt[apt_num] ;
     G4PVPlacement*   vec_physApt[apt_num];
 
     for(int iapt=0; iapt<fAptNumber; iapt++) {
         if ( fAptShape[iapt] == 0 ) {
-            vec_logicApt[iapt] = RoundAptConstruction(vec_aptsize[iapt], aptOutRadius);
-            G4cout << " ======> Adding " << iapt << " Round Aperture" << G4endl;
+            vec_logicApt[iapt] = RoundAptConstruction(fAptSize[iapt], aptOutRadius);
+            G4cout << " ======> Adding " << iapt << " Round Aperture with size " << fAptSize[iapt] << " at " << fAptPos[iapt] << G4endl;
         }
 
         else if ( fAptShape[iapt] == 1 ) {
-            vec_logicApt[iapt] = SquareAptConstruction(vec_aptsize[iapt], aptOutRadius);
-            G4cout << " ======> Adding " << iapt << " Square Aperture" << G4endl;
+            vec_logicApt[iapt] = SquareAptConstruction(fAptSize[iapt], aptOutRadius, fAptRot[iapt]);
+            G4cout << " ======> Adding " << iapt << " square Aperture with size " << fAptSize[iapt] << " at " << fAptPos[iapt] << G4endl;
         }
 
         else {
@@ -349,7 +405,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
         }
 
         vec_physApt[iapt]  = new G4PVPlacement(yRot,
-                                G4ThreeVector(vec_aptpos[iapt], 0, 0),
+                                G4ThreeVector(fAptPos[iapt], 0, 0),
                                 vec_logicApt[iapt],
                                 "physApt",
                                 worldLV,
@@ -358,26 +414,28 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
                                 fCheckOverlaps
                                 );
     
-        new G4LogicalBorderSurface("Air/Black Surface0", worldPV, vec_physApt[iapt], OpticalAirBlack); // optical surface
+        //new G4LogicalBorderSurface("Air/Black Surface0", worldPV, vec_physApt[iapt], OpticalAirBlack); // optical surface
+        //vec_logicApt[iapt] -> SetVisAttributes(aptVisAtt);
 
     }    
-    
+   
+    // ooooooooooOOOOOOOOOOOOOOOOOOOOoooooooooo //
     // deign of PMT
 
     G4ThreeVector pos = fPmtPos;
     G4LogicalVolume* logicPmt = PmtConstruction();
-    //G4VPhysicalVolume* physPmt = 
-    //    new G4PVPlacement(yRot,
-    //            //G4ThreeVector(424.75*mm,0., 0.),
-    //            pos,
-    //            logicPmt,
-    //            "physPmt",
-    //            worldLV,
-    //            false,
-    //            0,
-    //            fCheckOverlaps);
+    G4VPhysicalVolume* physPmt = 
+        new G4PVPlacement(yRot,
+                //G4ThreeVector(424.75*mm,0., 0.),
+                pos,
+                logicPmt,
+                "physPmt",
+                worldLV,
+                false,
+                0,
+                fCheckOverlaps);
 
-
+    logicPmt    ->  SetVisAttributes(tubVisAtt);
 
 
 
@@ -673,16 +731,6 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
     //  new G4LogicalBorderSurface("Air/Metal Surface2",worldPV,physheft,OpticalAirMetal);
 
 
-    // Visualization attributes
-    G4VisAttributes* boxVisAtt = new G4VisAttributes(G4Colour(0, 1, 1));
-    boxVisAtt->SetForceSolid ();
-    G4VisAttributes* tubVisAtt = new G4VisAttributes(G4Colour(1, 0, 1));
-    tubVisAtt->SetForceSolid();
-    G4VisAttributes* aptVisAtt = new G4VisAttributes(G4Colour(0.5, 0.5, 1));
-    aptVisAtt->SetForceSolid();
-    logicCell   ->  SetVisAttributes(boxVisAtt);
-    logicPmt    ->  SetVisAttributes(tubVisAtt);
-    //logicApt    ->  SetVisAttributes(aptVisAtt);
 
     return worldPV;
 

@@ -39,7 +39,12 @@ class B1DetectorConstructionMessenger : public G4UImessenger
         G4UIcmdWithADouble*             fRindexCmd;
 
         // aperture configuration
+        G4UIcmdWithAnInteger*           fAptModeCmd;
         G4UIcmdWithAnInteger*           fNAptCmd;
+        G4UIcmdWithAnInteger*           fAptShapeCmd;
+        G4UIcmdWithADoubleAndUnit*      fAptSizeCmd;
+        G4UIcmdWithADoubleAndUnit*      fAptPosCmd;
+        G4UIcmdWithADoubleAndUnit*      fAptRotCmd;
 };
 
 #endif

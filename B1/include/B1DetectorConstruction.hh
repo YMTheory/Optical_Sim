@@ -47,15 +47,23 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
         void SetRindex(G4double rindex) { fRindex = rindex; }
 
         void SetAptNumber(G4int number) { fAptNumber = number; } 
+        // set for all apertures
         void SetAptSize(G4double *size);
         void SetAptPos(G4double* pos);
         void SetAptShape(G4int* shape); // 0 for round, 1 for square
+        //set one aperture
+        void SetAptConfigMode(G4int); // 0 for all, 1 for one by one
+        void ClearAptConfig();
+        void SetOneAptShape(G4int);
+        void SetOneAptSize(G4double);
+        void SetOneAptPos(G4double);
+        void SetOneAptRot(G4double);
 
     private:
         G4LogicalVolume* CellConstruction();
         G4LogicalVolume* TubeConstruction();
         G4LogicalVolume* RoundAptConstruction(G4double, G4double);
-        G4LogicalVolume* SquareAptConstruction(G4double, G4double);
+        G4LogicalVolume* SquareAptConstruction(G4double, G4double, G4double);
         G4LogicalVolume* PmtConstruction();
 
     private:
@@ -72,10 +80,12 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
         G4double              fPmtSize;
         G4ThreeVector         fPmtPos;
 
+        G4int                 fAptMode;
         G4int                 fAptNumber;
         std::vector<G4double> fAptSize;
         std::vector<G4double> fAptPos;
         std::vector<G4int>    fAptShape;
+        std::vector<G4double> fAptRot;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

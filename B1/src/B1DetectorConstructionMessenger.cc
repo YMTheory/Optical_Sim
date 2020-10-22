@@ -44,10 +44,32 @@ B1DetectorConstructionMessenger( B1DetectorConstruction* mpga )
     fRindexCmd->SetParameterName("Rindex", true, true);
     fRindexCmd->SetDefaultValue(1.5);
 
+    fAptModeCmd = new G4UIcmdWithAnInteger("/B1/det/setAptMode", this);
+    fAptModeCmd->SetGuidance("Set aperture config mode");
+    fAptModeCmd->SetDefaultValue(0);
+
     fNAptCmd = new G4UIcmdWithAnInteger("/B1/det/setNApt", this);
     fNAptCmd->SetGuidance("Set Aperture number");
     fNAptCmd->SetDefaultValue(1);
 
+    fAptShapeCmd = new G4UIcmdWithAnInteger("/B1/det/setAptShape", this);
+    fAptShapeCmd->SetGuidance("Set one aperture shape");
+    fAptShapeCmd->SetDefaultValue(0);  // 0 for round, 1 for square
+    
+    fAptSizeCmd = new G4UIcmdWithADoubleAndUnit("/B1/det/setAptSize", this);
+    fAptSizeCmd->SetGuidance("Set one aperture size");
+    fAptSizeCmd->SetDefaultValue(2);
+    fAptSizeCmd->SetDefaultUnit("mm");
+
+    fAptPosCmd = new G4UIcmdWithADoubleAndUnit("/B1/det/setAptPos", this);
+    fAptPosCmd->SetGuidance("Set one aperture position");
+    fAptPosCmd->SetDefaultValue(100);
+    fAptPosCmd->SetDefaultUnit("mm");
+
+    fAptRotCmd = new G4UIcmdWithADoubleAndUnit("/B1/det/setAptRot", this);
+    fAptRotCmd->SetGuidance("Set one aperture rotation");
+    fAptRotCmd->SetDefaultValue(0);
+    fAptRotCmd->SetDefaultUnit("deg");
 }   
 
 B1DetectorConstructionMessenger::
@@ -56,6 +78,12 @@ B1DetectorConstructionMessenger::
     delete fPmtSizeCmd;
     delete fPmtPosCmd;
     delete fRindexCmd;
+    delete fAptModeCmd;
+    delete fNAptCmd;
+    delete fAptShapeCmd;
+    delete fAptSizeCmd;
+    delete fAptPosCmd;
+    delete fAptRotCmd;
 }
 
 
@@ -80,6 +108,26 @@ void B1DetectorConstructionMessenger::SetNewValue(
 
     else if ( cmd == fNAptCmd ) {
         fTarget->SetAptNumber( fNAptCmd->GetNewIntValue(newValue) );
+    }
+
+    else if ( cmd == fAptModeCmd ) {
+        fTarget->SetAptConfigMode( fAptModeCmd->GetNewIntValue(newValue) );
+    }
+
+    else if ( cmd == fAptShapeCmd ) {
+        fTarget->SetOneAptShape( fAptShapeCmd->GetNewIntValue(newValue) );
+    }
+
+    else if ( cmd == fAptSizeCmd ) {
+        fTarget->SetOneAptSize( fAptSizeCmd->GetNewDoubleValue(newValue) );
+    }
+
+    else if ( cmd == fAptPosCmd ) {
+        fTarget->SetOneAptPos( fAptPosCmd->GetNewDoubleValue(newValue) );
+    }
+
+    else if ( cmd == fAptRotCmd ) {
+        fTarget->SetOneAptRot( fAptRotCmd->GetNewDoubleValue(newValue) );
     }
 
     else 
