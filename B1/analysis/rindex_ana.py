@@ -260,8 +260,8 @@ if __name__ == "__main__":
     #ax1 = plt.subplot(gs[0])
     #plt.errorbar(rindex, nphoton_arr_lineapt3, yerr=enphoton_arr_lineapt3, label="G4Sim")
     #plt.plot(rindex, totphoton*(math.tan(real_angle)/math.tan(origin_angle))**2/np.array(Cn_array)*np.array(Cv_array), label="CnCv correction")
-    pred_data = totphoton*(math.tan(real_angle)/math.tan(origin_angle))**2/np.array(Cn_array)
-    plt.plot(rindex, pred_data, label="Cn correction")
+    #pred_data = totphoton*(math.tan(real_angle)/math.tan(origin_angle))**2/np.array(Cn_array)
+    #plt.plot(rindex, pred_data, label="Cn correction")
     #plt.ylabel("nphoton")
     plt.legend()
     plt.grid(True)
@@ -284,8 +284,8 @@ if __name__ == "__main__":
     plt.xlabel("rindex")
     plt.ylabel("nPhoton")
     #plt.grid(True)
-    plt.show()
-    #plt.savefig("abs.pdf")
+    #plt.show()
+    plt.savefig("twocases.pdf")
 
 
     """

@@ -174,7 +174,13 @@ G4LogicalVolume* B1DetectorConstruction::SquareAptConstruction(G4double xy, G4do
     G4Tubs* solidAptOut = new G4Tubs("solidAptOut", 0, out_radius, z, 0, 2*pi);
     G4Box*  solidApt    = new G4Box("solidApt", xy, xy, z);
     G4RotationMatrix* rot = new G4RotationMatrix();
-    rot->rotateX(ang);
+    G4cout << "\n";
+    G4cout << " ======> Config One Aperture <======= " << G4endl;
+    G4cout << "Aperture Shape: Squar" << G4endl;
+    G4cout << "Aperture Size : " << xy << G4endl;
+    G4cout << "Aperture Rotation Angle: " << ang * deg << G4endl;
+    G4cout << "\n";
+    rot->rotateZ(ang);
     G4SubtractionSolid* subApt = 
         new G4SubtractionSolid("subApt",solidAptOut, solidApt, rot, G4ThreeVector());
     G4LogicalVolume* logicApt = 
@@ -388,6 +394,7 @@ G4VPhysicalVolume* B1DetectorConstruction::DefineVolumes()
     G4LogicalVolume* vec_logicApt[apt_num] ;
     G4PVPlacement*   vec_physApt[apt_num];
 
+    G4cout << " ++++++++++++++++++++++++++++++++> Total " << fAptNumber << " aptertures has been added !" << G4endl;
     for(int iapt=0; iapt<fAptNumber; iapt++) {
         if ( fAptShape[iapt] == 0 ) {
             vec_logicApt[iapt] = RoundAptConstruction(fAptSize[iapt], aptOutRadius);
