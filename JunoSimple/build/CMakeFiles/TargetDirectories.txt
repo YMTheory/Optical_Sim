@@ -1,0 +1,8 @@
+/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/JunoSimple/build/CMakeFiles/install/local.dir
+/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/JunoSimple/build/CMakeFiles/install/strip.dir
+/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/JunoSimple/build/CMakeFiles/B1.dir
+/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/JunoSimple/build/CMakeFiles/install.dir
+/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/JunoSimple/build/CMakeFiles/exampleB1.dir
+/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/JunoSimple/build/CMakeFiles/rebuild_cache.dir
+/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/JunoSimple/build/CMakeFiles/edit_cache.dir
+/junofs/users/yumiao/simulation/Rayleigh/Simulation/Optical_Sim/JunoSimple/build/CMakeFiles/list_install_components.dir
